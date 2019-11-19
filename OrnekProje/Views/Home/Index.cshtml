@@ -1,0 +1,159 @@
+﻿@model FaturaModelView
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.slim.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>Index</title>
+</head>
+<body>
+    
+    <div>
+
+        <form method="post" asp-action="FaturaOlustur">
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">Ad:</label>
+                        <div class="col-sm-10">
+                            <input type="text" required onkeydown="return alphaOnly(event);" class="form-control" asp-for="musteri.ad" placeholder="Müşterinin adını giriniz...">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputPassword3" class="col-sm-2 col-form-label">Soyad:</label>
+                        <div class="col-sm-10">
+                            <input type="text" required class="form-control" onkeydown="return alphaOnly(event);" asp-for="musteri.soyad" placeholder="Müşterinin soyadını giriniz...">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="inputPassword3" class="col-sm-2 col-form-label">Adres</label>
+                        <div class="col-sm-10">
+                            <input type="text" required class="form-control" asp-for="musteri.adres"  placeholder="Müşterinin adresini giriniz...">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputPassword3" class="col-sm-2 col-form-label">Eposta</label>
+                        <div class="col-sm-10">
+                            <input type="email" required class="form-control" asp-for="musteri.eposta" placeholder="Müşterinin eposta adresini giriniz...">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputPassword3" class="col-sm-2 col-form-label">Telefon</label>
+                        <div class="col-sm-10">
+                            <input type="number" required class="form-control" asp-for="musteri.telefon"  placeholder="Müşterinin telefonunu giriniz...">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">Fatura Tarihi:</label>
+                        <div class="col-sm-10">
+                            <input type="date" required class="input-group date" asp-for="fatura.faturaTarihi" >
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputPassword3" class="col-sm-2 col-form-label">Fatura No:</label>
+                        <div class="col-sm-10">
+                            <input type="text" required class="form-control" asp-for="fatura.faturaNo" placeholder="Fatura No">
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+            <div class="row" id="appornek">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Ürün Adı</th>
+                            <th scope="col">Adet</th>
+                            <th scope="col">Birim Fiyat</th>
+                            <th scope="col">Toplam</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr>
+                            <th scope="row"><input type="text" onkeydown="return alphaOnly(event);" required class="form-control" asp-for="alinanUruns[0].urunAdi" style="font-weight:bold" /></th>
+                            <td><input type="number"  required class="form-control" asp-for="alinanUruns[0].adet" v-model="Adet1" v-on:input="changeFiyat" /></td>
+                            <td><input type="number" required class="form-control" asp-for="alinanUruns[0].birimFiyat"  v-model="Fiyat1" v-on:input="changeFiyat" /></td>
+                            <td><input type="number" required class="form-control" asp-for="alinanUruns[0].toplam"  readonly v-model="Toplam1" /></td>
+
+                        </tr>
+                        <tr>
+                            <th scope="row"><input type="text" onkeydown="return alphaOnly(event);" class="form-control" style="font-weight:bold" asp-for="alinanUruns[1].urunAdi" /></th>
+                            <td><input type="number" required class="form-control" asp-for="alinanUruns[1].adet" v-model="Adet2" v-on:input="changeFiyat" /></td>
+                            <td><input type="number" required class="form-control" asp-for="alinanUruns[1].birimFiyat" v-model="Fiyat2" v-on:input="changeFiyat" /></td>
+                            <td><input type="number"  class="form-control" asp-for="alinanUruns[1].toplam" readonly  v-model="Toplam2" /></td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><input type="text" onkeydown="return alphaOnly(event);" class="form-control"  asp-for="alinanUruns[2].urunAdi" style="font-weight:bold" /></th>
+                            <td><input type="number" required class="form-control" asp-for="alinanUruns[2].adet"  v-model="Adet3" v-on:input="changeFiyat" /></td>
+                            <td><input type="number" required class="form-control" asp-for="alinanUruns[2].birimFiyat" v-model="Fiyat3" v-on:input="changeFiyat" /></td>
+                            <td><input type="number"  class="form-control" asp-for="alinanUruns[2].toplam" readonly  v-model="Toplam3" /></td>
+                        </tr>
+
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td><label>Genel Toplam:</label></td>
+                            <td><input type="number" class="form-control" v-model="Toplam4" readonly asp-for="fatura.genelToplam"  /></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td><input type="submit" class="btn btn-success" value="Oluştur" /> </td>
+                        </tr>>
+                    </tbody>
+                </table>
+
+            </div>
+            <div>
+
+            </div>
+           
+        </form>
+    </div>
+</body>
+</html>
+<script>
+    var appornek = new Vue({
+        el: '#appornek',
+        data: {
+            Toplam1: 0,
+            Adet1: 0,
+            Fiyat1: 0,
+            Toplam2: 0,
+            Adet2: 0,
+            Fiyat2: 0,
+            Toplam3: 0,
+            Adet3: 0,
+            Fiyat3: 0,
+            Toplam4: 0
+        },
+        methods: {
+            changeFiyat: function (event) {
+                this.Toplam1 = this.Adet1 * this.Fiyat1;
+                this.Toplam2 = this.Adet2 * this.Fiyat2;
+                this.Toplam3 = this.Adet3 * this.Fiyat3;
+                this.Toplam4 = this.Toplam1 + this.Toplam2 + this.Toplam3;
+            }
+        }
+    });
+</script>
+<script>
+
+    function alphaOnly(event) {
+        var key = event.keyCode;
+        return ((key >= 65 && key <= 90) || key == 8 ||key==9 || key==219 || key==221 || key==222 || key==186 || key==191 || key==220);
+    };
+</script>
